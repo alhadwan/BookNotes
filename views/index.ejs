@@ -6,6 +6,23 @@
     <title>Document</title>
 </head>
 <body>
+      
+    <% if (book && book.length > 0) { %>
+        <% book.forEach((post) => { %>
+          <div class="container">
+            <h1><%= post.title %></h1>
+            <h3><%= post.notes %></h3>
+            <p>Rating: <%= post.rating %> ⭐</p>
+            <p>Read on: <%= post.read_date %></p>
+            <p>ISBN: <%= post.isbn %></p>
+            <a href="/edit/<%= post.id %>" class="btn btn-primary">Edit</a>
+            <a href="/delete/<%= post.id %>" class="btn btn-danger">Delete</a>
+            <hr>
+          </div>
+        <% }); %>
+      <% } else { %>
+        <p>No books found.</p>
+      <% } %>
     
 </body>
 </html>
