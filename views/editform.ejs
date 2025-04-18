@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
+    <title>Edit Form</title>
+</head>
+<body>
+
+<div class="container d-flex justify-content-center align-items-center min-vh-100">
+  <form class="p-4 border rounded" style="width: 600px; height: 600px;" action="/edit/<%= book.id %>" method="POST">
+    <div class="mb-3">
+      <label for="exampleFormControlInput1" class="form-label">Book title</label>
+      <input type="text" class="form-control" id="form" name="editbooktitle" value="<%=book.title%>">
+    </div>
+    <div class="mb-3">
+      <label for="exampleFormControlInput1" class="form-label">Book ISBN</label>
+      <input type="text" class="form-control" id="form" name="editbookisbn" value="<%=book.isbn%>">
+    </div>
+    <div class="mb-3">
+      <label for="exampleFormControlInput1" class="form-label">Book Rating</label>
+      <input type="text" class="form-control" id="form" name="editrating" value="<%=book.rating%>">
+    </div>
+    <div class="mb-3">
+      <label for="exampleFormControlInput1" class="form-label">Read Date</label>
+      <input type="text" class="form-control" id="form" name="editdate" value="<%= book.read_date.toISOString().split('T')[0] %>">
+    </div>
+    <div class="mb-3">
+      <label for="exampleFormControlTextarea1" class="form-label">Book Notes</label>
+      <textarea class="form-control" id="form" name="editbooknotes" rows="3"><%=book.notes%></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary w-100">Submit</button>
+  </form>
+</div>
+
+    
+</body>
+</html>

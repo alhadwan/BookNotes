@@ -2,6 +2,7 @@ import express from "express";
 import bodyParser from "body-parser";
 import pg from "pg";
 import axios from "axios";
+import { cache } from "ejs";
 
 const app = express();
 const port = 3000;
@@ -51,7 +52,10 @@ app.get("/add", (req, res) => {
     res.render("form.ejs");
   });
 
-  app.post("/submit", async(req, res) => {
+  app.get("/edit", (req, res) => {
+    res.render("editform.ejs");
+  });
+app.post("/submit", async(req, res) => {
     const booktitle = req.body.booktitle;
     const booknotes = req.body.booknotes;
     const rating = req.body.rating;
@@ -66,6 +70,53 @@ app.get("/add", (req, res) => {
     res.redirect("/");
   });
 
+
+  app.get("/edit/:id", async (req, res) => {
+  const id = req.params.id;
+  const result = await db.query("SELECT * FROM books WHERE id = $1", [id]);
+  const book = result.rows[0];
+  console.log(book);
+    if (book) {
+        res.render("editform.ejs", { book: book });
+      } else {
+        res.status(404).send("Book not found.");
+      }
+});
+
+  app.post("/edit/:id", async(req, res) => {
+    const editbooktitle = req.body.editbooktitle;
+    const editbooknotes = req.body.editbooknotes;
+    console.log("NOTES:", editbooknotes);
+    const editrating = req.body.editrating;
+    const editdate = req.body.editdate;
+    const editbookisbn = req.body.editbookisbn;
+
+    const id = Number(req.params.id); 
+    
+    try {
+        const result = await db.query("UPDATE books SET title = $1, notes = $2, rating = $3, read_date = $4, isbn = $5 WHERE id = $6;",[editbooktitle, editbooknotes, editrating, editdate, editbookisbn, id]);
+         const date = result.rows;
+         console.log(date); 
+
+         res.redirect("/");
+      } catch (err) {
+        console.error("Error updating book:", err);
+        res.status(500).send("Failed to update book.");
+      }
+  });
+
+  app.post("/delete/:id", async (req, res) => {
+    const id = req.params.id;
+    try{
+        const result = await db.query("DELETE FROM books WHERE id = $1 RETURNING *;", [id]);
+        console.log("Deleted book:", result.rows[0]);
+        res.redirect("/");   
+    }catch(err){
+        console.error("Error deleting book:", err);
+        res.status(500).send("Failed to delete book.");
+    }
+    
+  });
 
 
 app.listen(port, () => {
