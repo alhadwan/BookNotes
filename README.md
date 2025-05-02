@@ -17,8 +17,9 @@ A personal book-tracking web app where you can log books you've read, add your n
 - *API*: [Open Library Covers API](https://openlibrary.org/dev/docs/api/covers)
 
 # Setup & Installation
-   git clone https://github.com/your-username/book-notes-app.git
-   cd book-notes-app
+-  git clone https://github.com/your-username/book-notes-app.git
+-  cd book-notes-app
+-  nodemon index.js (start project) 
 
 # Example Entry
   PHOTO
