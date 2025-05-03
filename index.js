@@ -1,6 +1,12 @@
 import express from "express";
 import bodyParser from "body-parser";
-import pg from "pg";
+import dotenv from 'dotenv';
+import pg from 'pg';
+
+dotenv.config();
+
+const { Client } = pg;
+
 import axios from "axios";
 import { cache } from "ejs";
 
@@ -11,15 +17,20 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.set("view engine", "ejs");
 
-const db = new pg.Client({
-    user: "postgres",
-    host: "localhost",
-    database: "bookNote",
-    password: "123",
-    port: 5432,
-  });
-  
-  db.connect();
+// const db = new pg.Client({
+//     user: "postgres",
+//     host: "localhost",
+//     database: "bookNote",
+//     password: "",
+//     port: 5432,
+//   });
+
+const db = new Client({
+  connectionString: process.env.DATABASE_URL,
+  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
+});
+
+db.connect();
 let books = [
     // {id: 1,
     // title: 'rich dad poor dad',
