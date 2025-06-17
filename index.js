@@ -17,20 +17,21 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.set("view engine", "ejs");
 
-// const db = new pg.Client({
-//     user: "postgres",
-//     host: "localhost",
-//     database: "bookNote",
-//     password: "",
-//     port: 5432,
-//   });
+const db = new pg.Client({
+    user: "postgres",
+    host: "localhost",
+    database: "bookNote",
+    password: "123",
+    port: 5432,
+  });
 
-const db = new Client({
-  connectionString: process.env.DATABASE_URL,
-  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
-});
+// const db = new Client({
+//   connectionString: process.env.DATABASE_URL,
+//   ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
+// });
 
 db.connect();
+
 let books = [
     // {id: 1,
     // title: 'rich dad poor dad',
