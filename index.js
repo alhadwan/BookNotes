@@ -17,18 +17,22 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.set("view engine", "ejs");
 
-const db = new pg.Client({
-    user: "postgres",
-    host: "localhost",
-    database: "bookNote",
-    password: "123",
-    port: 5432,
-  });
+let db;
 
-// const db = new Client({
-//   connectionString: process.env.DATABASE_URL,
-//   ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
-// });
+if (process.env.NODE_ENV === "production") {
+  db = new Client({
+    connectionString: process.env.DATABASE_URL,
+    ssl: { rejectUnauthorized: false },
+  });
+} else {
+  db = new Client({
+   user: process.env.PG_USER,
+    host: process.env.PG_HOST,
+    database: process.env.PG_DATABASE,
+    password: process.env.PG_PASSWORD,
+    port: process.env.PG_PORT,
+  });
+}
 
 db.connect();
 
@@ -72,7 +76,6 @@ app.post("/submit", async(req, res) => {
     const booknotes = req.body.booknotes;
     const rating = req.body.rating;
     const date = req.body.date;
-    console.log(date);
     const bookisbn = req.body.bookisbn;
 
     const result = await db.query("INSERT INTO books (title, notes, rating, read_date, isbn) VALUES ($1, $2, $3, $4, $5)",[booktitle, booknotes, rating, date, bookisbn]);
@@ -85,6 +88,7 @@ app.post("/submit", async(req, res) => {
 
   app.get("/edit/:id", async (req, res) => {
   const id = req.params.id;
+
   const result = await db.query("SELECT * FROM books WHERE id = $1", [id]);
   const book = result.rows[0];
   console.log(book);
