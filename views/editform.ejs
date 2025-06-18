@@ -3,23 +3,23 @@
       <form class="p-4 border rounded" style="width: 600px; height: 600px;" action="/edit/<%= book.id %>" method="POST">
         <div class="mb-3">
           <label for="exampleFormControlInput1" class="form-label">Book title</label>
-          <input type="text" class="form-control" id="form" name="editbooktitle" value="<%=book.title%>">
+          <input type="text" class="form-control" id="form" name="editBookTitle" value="<%=book.title%>">
         </div>
         <div class="mb-3">
           <label for="exampleFormControlInput1" class="form-label">Book ISBN</label>
-          <input type="text" class="form-control" id="form" name="editbookisbn" value="<%=book.isbn%>">
+          <input type="text" class="form-control" id="form" name="editBookIsBn" value="<%=book.isbn%>">
         </div>
         <div class="mb-3">
           <label for="exampleFormControlInput1" class="form-label">Book Rating</label>
-          <input type="text" class="form-control" id="form" name="editrating" value="<%=book.rating%>">
+          <input type="text" class="form-control" id="form" name="editRating" value="<%=book.rating%>">
         </div>
         <div class="mb-3">
           <label for="exampleFormControlInput1" class="form-label">Read Date</label>
-          <input type="text" class="form-control" id="form" name="editdate" value="<%= book.read_date.toISOString().split('T')[0] %>">
+          <input type="text" class="form-control" id="form" name="editDate" value="<%= book.read_date.toISOString().split('T')[0] %>">
         </div>
         <div class="mb-3">
           <label for="exampleFormControlTextarea1" class="form-label">Book Notes</label>
-          <textarea class="form-control" id="form" name="editbooknotes" rows="3"><%=book.notes%></textarea>
+          <textarea class="form-control" id="form" name="editBookNotes" rows="3"><%=book.notes%></textarea>
         </div>
         <button type="submit" class="btn btn-primary w-100">Submit</button>
       </form>

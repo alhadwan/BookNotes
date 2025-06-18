@@ -6,10 +6,6 @@ import pg from 'pg';
 dotenv.config();
 
 const { Client } = pg;
-
-import axios from "axios";
-import { cache } from "ejs";
-
 const app = express();
 const port = 3000;
 
@@ -36,14 +32,7 @@ if (process.env.NODE_ENV === "production") {
 
 db.connect();
 
-let books = [
-    // {id: 1,
-    // title: 'rich dad poor dad',
-    // notes: 'this is a great finance book',
-    // rating: 5,
-    // read_date: 2025-04-01T07:00:00.000Z,
-    // isbn: '1612681131'}
-];
+let books = [];
 
 app.get("/", async(req, res) =>{
     try{
@@ -54,10 +43,8 @@ app.get("/", async(req, res) =>{
         }else if(sort === "date"){
             orderby = "read_date DESC"
         }
-        console.log(orderby);
         const result = await db.query(`SELECT * FROM books ORDER By ${orderby}`);
          books = result.rows;
-        console.log(books);
         res.render("index.ejs", {book: books});
     } catch(err){
         console.error("Error fetching books:", err);
@@ -69,18 +56,17 @@ app.get("/add", (req, res) => {
   });
 
   app.get("/edit", (req, res) => {
-    res.render("editform.ejs");
+    res.render("editForm.ejs");
   });
 app.post("/submit", async(req, res) => {
-    const booktitle = req.body.booktitle;
-    const booknotes = req.body.booknotes;
+    const bookTitle = req.body.bookTitle;
+    const bookNotes = req.body.bookNotes;
     const rating = req.body.rating;
     const date = req.body.date;
-    const bookisbn = req.body.bookisbn;
+    const bookIsBn = req.body.bookIsBn;
 
-    const result = await db.query("INSERT INTO books (title, notes, rating, read_date, isbn) VALUES ($1, $2, $3, $4, $5)",[booktitle, booknotes, rating, date, bookisbn]);
+    const result = await db.query("INSERT INTO books (title, notes, rating, read_date, isbn) VALUES ($1, $2, $3, $4, $5)",[bookTitle, bookNotes, rating, date, bookIsBn]);
     const Data = result.rows;
-    console.log(Data);
 
     res.redirect("/");
   });
@@ -91,28 +77,26 @@ app.post("/submit", async(req, res) => {
 
   const result = await db.query("SELECT * FROM books WHERE id = $1", [id]);
   const book = result.rows[0];
-  console.log(book);
+ 
     if (book) {
-        res.render("editform.ejs", { book: book });
+        res.render("editForm.ejs", { book: book });
       } else {
         res.status(404).send("Book not found.");
-      }
+      }BookNote
 });
 
   app.post("/edit/:id", async(req, res) => {
-    const editbooktitle = req.body.editbooktitle;
-    const editbooknotes = req.body.editbooknotes;
-    console.log("NOTES:", editbooknotes);
-    const editrating = req.body.editrating;
-    const editdate = req.body.editdate;
-    const editbookisbn = req.body.editbookisbn;
+    const editBookTitle = req.body.editBookTitle;
+    const editBookNotes = req.body.editBookNotes;
+    const editRating = req.body.editRating;
+    const editDate = req.body.editDate;
+    const editBookIsBn = req.body.editBookIsbn;
 
     const id = Number(req.params.id); 
     
     try {
-        const result = await db.query("UPDATE books SET title = $1, notes = $2, rating = $3, read_date = $4, isbn = $5 WHERE id = $6;",[editbooktitle, editbooknotes, editrating, editdate, editbookisbn, id]);
+        const result = await db.query("UPDATE books SET title = $1, notes = $2, rating = $3, read_date = $4, isbn = $5 WHERE id = $6;",[editBookTitle, editBookNotes, editRating, editDate, editBookIsBn, id]);
          const date = result.rows;
-         console.log(date); 
 
          res.redirect("/");
       } catch (err) {
@@ -123,9 +107,9 @@ app.post("/submit", async(req, res) => {
 
   app.post("/delete/:id", async (req, res) => {
     const id = req.params.id;
+
     try{
         const result = await db.query("DELETE FROM books WHERE id = $1 RETURNING *;", [id]);
-        console.log("Deleted book:", result.rows[0]);
         res.redirect("/");   
     }catch(err){
         console.error("Error deleting book:", err);
