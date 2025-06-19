@@ -58,6 +58,7 @@ app.get("/add", (req, res) => {
   app.get("/edit", (req, res) => {
     res.render("editForm.ejs");
   });
+
 app.post("/submit", async(req, res) => {
     const bookTitle = req.body.bookTitle;
     const bookNotes = req.body.bookNotes;
@@ -65,10 +66,19 @@ app.post("/submit", async(req, res) => {
     const date = req.body.date;
     const bookIsBn = req.body.bookIsBn;
 
+
+    if (!bookTitle || !bookNotes || !rating || !date || !bookIsBn) {
+    
+    return res.render("form", {
+      error: "All fields are required."
+    });
+  } else{
+
     const result = await db.query("INSERT INTO books (title, notes, rating, read_date, isbn) VALUES ($1, $2, $3, $4, $5)",[bookTitle, bookNotes, rating, date, bookIsBn]);
     const Data = result.rows;
 
     res.redirect("/");
+  }
   });
 
 
@@ -82,7 +92,7 @@ app.post("/submit", async(req, res) => {
         res.render("editForm.ejs", { book: book });
       } else {
         res.status(404).send("Book not found.");
-      }BookNote
+      }
 });
 
   app.post("/edit/:id", async(req, res) => {
@@ -90,11 +100,22 @@ app.post("/submit", async(req, res) => {
     const editBookNotes = req.body.editBookNotes;
     const editRating = req.body.editRating;
     const editDate = req.body.editDate;
-    const editBookIsBn = req.body.editBookIsbn;
+    const editBookIsBn = req.body.editBookIsBn;
 
     const id = Number(req.params.id); 
-    
-    try {
+
+    if (!editBookTitle || !editBookNotes || !editRating || !editDate || !editBookIsBn){
+
+        // Re-fetch the book to refill the form
+       const result = await db.query("SELECT * FROM books WHERE id = $1", [id]);
+        const book = result.rows[0];
+
+        return res.render("editForm", {
+          book,
+         error: "All fields are required."
+    });
+    }else{
+         try {
         const result = await db.query("UPDATE books SET title = $1, notes = $2, rating = $3, read_date = $4, isbn = $5 WHERE id = $6;",[editBookTitle, editBookNotes, editRating, editDate, editBookIsBn, id]);
          const date = result.rows;
 
@@ -102,7 +123,8 @@ app.post("/submit", async(req, res) => {
       } catch (err) {
         console.error("Error updating book:", err);
         res.status(500).send("Failed to update book.");
-      }
+      }   
+    }
   });
 
   app.post("/delete/:id", async (req, res) => {

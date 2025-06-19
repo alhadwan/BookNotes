@@ -1,17 +1,23 @@
 <%- include("partials/header.ejs") %>
-<div class="container d-flex justify-content-center align-items-center min-vh-100 app-wrapper">
+  <div class="container d-flex justify-content-center align-items-center min-vh-100 app-wrapper">
+       
       <form class="p-4 border rounded" style="width: 600px; height: 600px;" action="/submit" method="POST">
+        <% if (locals.error ) { %>
+    <div class="alert alert-danger w-100 text-center" role="alert">
+      <%= error %>
+    </div>
+  <% } %>
         <div class="mb-3">
           <label for="exampleFormControlInput1" class="form-label">Book title</label>
           <input type="text" class="form-control" id="form" name="bookTitle" placeholder=" ">
         </div>
         <div class="mb-3">
           <label for="exampleFormControlInput1" class="form-label">Book ISBN</label>
-          <input type="text" class="form-control" id="form" name="bookIsBn" placeholder=" ">
+          <input type="text" class="form-control" id="form" name="bookIsBn" placeholder="ISBN-10:0000000000">
         </div>
         <div class="mb-3">
           <label for="exampleFormControlInput1" class="form-label">Book Rating</label>
-          <input type="text" class="form-control" id="form" name="rating" placeholder=" ">
+          <input type="text" class="form-control" id="form" name="rating" placeholder="Rate:1-5">
         </div>
         <div class="mb-3">
           <label for="exampleFormControlInput1" class="form-label">Read Date</label>
@@ -21,7 +27,7 @@
           <label for="exampleFormControlTextarea1" class="form-label">book Notes</label>
           <textarea class="form-control" id="form" name="bookNotes" rows="3"></textarea>
         </div>
-        <button type="submit" class="btn btn-primary w-100">Submit</button>
+        <button class="btn-submit" type="submit">Submit</button>
       </form>
 </div>
 <%- include("partials/footer.ejs") %>

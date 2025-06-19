@@ -1,6 +1,11 @@
 <%- include("partials/header.ejs") %>
-<div class="container d-flex justify-content-center align-items-center min-vh-100 app-wrapper">
+  <div class="container d-flex justify-content-center align-items-center min-vh-100 app-wrapper">
       <form class="p-4 border rounded" style="width: 600px; height: 600px;" action="/edit/<%= book.id %>" method="POST">
+        <% if (locals.error) { %>
+            <div class="alert alert-danger w-100 text-center" role="alert">
+              <%= error %>
+            </div>
+         <% } %>
         <div class="mb-3">
           <label for="exampleFormControlInput1" class="form-label">Book title</label>
           <input type="text" class="form-control" id="form" name="editBookTitle" value="<%=book.title%>">
@@ -21,7 +26,8 @@
           <label for="exampleFormControlTextarea1" class="form-label">Book Notes</label>
           <textarea class="form-control" id="form" name="editBookNotes" rows="3"><%=book.notes%></textarea>
         </div>
-        <button type="submit" class="btn btn-primary w-100">Submit</button>
+        <button class="btn-submit" type="submit">Submit</button>
       </form>
 </div>
+
 <%- include("partials/footer.ejs") %>
