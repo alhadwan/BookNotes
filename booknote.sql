@@ -7,5 +7,5 @@ CREATE TABLE books (
   isbn TEXT
 );
 
-INSERT INTO table_name (title, notes, rating, read_date, isbn)
+INSERT INTO books (title, notes, rating, read_date, isbn)
 VALUES ('rich dad poor dad', 'this is a great finance book', 5, '2025-04-01', '235624562');
