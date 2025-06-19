@@ -7,7 +7,7 @@ dotenv.config();
 
 const { Client } = pg;
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
@@ -26,7 +26,7 @@ if (process.env.NODE_ENV === "production") {
     host: process.env.PG_HOST,
     database: process.env.PG_DATABASE,
     password: process.env.PG_PASSWORD,
-    port: process.env.PG_PORT,
+    port: Number(process.env.PG_PORT),
   });
 }
 
