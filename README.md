@@ -20,3 +20,19 @@ A personal book-tracking web app where you can log what you’ve read, add your 
 -  cd BookNotes-project
 -  npm install
 -  nodemon index.js (start project) 
+
+# Database Setup on Render
+-  go to https://dashboard.render.com/d/dpg-d19ruo95pdvs73a4ofb0-a/info
+-  fill necessary info
+-  Add the following variables to your project: 
+      - DATABASE_URL=postgresql://<user>:<password>@<host>:5432/<database>?sslmode=require
+      - NODE_ENV=production
+-  Connect Your App to the Database
+    if (process.env.NODE_ENV === "production") {
+  db = new Client({
+    connectionString: process.env.DATABASE_URL,
+    ssl: { rejectUnauthorized: false },
+  });
+}
+- Initialize the Database using terminal(Create Table + Seed Data)
+    - psql "<DATABASE_URL>?sslmode=require" -f booknote.sql (PSQL Command)
